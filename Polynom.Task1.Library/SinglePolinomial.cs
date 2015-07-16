@@ -29,17 +29,16 @@ namespace Polynom.Task1.Library
         }
 
         #endregion
-        
-        #region Interfaces implementation
 
-        #region ICloneable
+        #region Virtual members overriding
+
         public object Clone()
         {
             return new SinglePolinomial(Сoefficients);
         }
-        #endregion
+        
 
-        #region IEquatable<SinglePolinomial>
+        
 
         public bool Equals(SinglePolinomial other)
         {
@@ -57,9 +56,6 @@ namespace Polynom.Task1.Library
             }
             return hashCode;
         }
-
-
-        #endregion
 
         #endregion
 

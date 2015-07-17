@@ -8,7 +8,7 @@ namespace Polynom.Task1.Library
 {
     public sealed class SinglePolinomial : ICloneable, IEquatable<SinglePolinomial>
     {
-        #region Properties & private fields
+        #region Properties
 
         public double[] Coefficients { get; set; }
 
@@ -85,27 +85,30 @@ namespace Polynom.Task1.Library
             return new SinglePolinomial(Coefficients);
         }
 
-        public bool Equals(SinglePolinomial other)
+        bool IEquatable<SinglePolinomial>.Equals(SinglePolinomial other)
         {
-            return this.Equals(other);
+            if (this.Coefficients.Length != other.Coefficients.Length)
+            {
+                return false;
+            }
+                        
+            for (int i = 0; i < Coefficients.Length; i++)
+            {
+                if (this.Coefficients[i] != other.Coefficients[i])
+                    return false;   
+            }
+            return true;            
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is SinglePolinomial)
-            {
-                return this.Equals((SinglePolinomial)obj);
-            }  
-            return false;
-        }
+
 
         public override int GetHashCode()
         {
             int hashCode = Degree.GetHashCode();
 
-            foreach (int c in Coefficients)
+            foreach (double c in Coefficients)
             {
-                hashCode = hashCode ^ c;
+                hashCode = hashCode ^ c.GetHashCode();
             }
             return hashCode;
         }
@@ -113,9 +116,6 @@ namespace Polynom.Task1.Library
         #endregion
 
         #region Operator Overloading
-        
-       
-
 
         #endregion
 
@@ -130,9 +130,11 @@ namespace Polynom.Task1.Library
         #endregion
 
 
-    
 
 
 
+
+
+        
     }
 }

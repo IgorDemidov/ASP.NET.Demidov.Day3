@@ -14,11 +14,8 @@ namespace ConsoleApplication1
             SinglePolinomial p = new SinglePolinomial();
 
             Console.WriteLine(p.Degree);
-            foreach (var item in p.Сoefficients)
-            {
-                Console.WriteLine(item);
-            }
 
+           
             Console.ReadLine();
             
         }

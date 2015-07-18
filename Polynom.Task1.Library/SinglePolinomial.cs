@@ -12,7 +12,7 @@ namespace Polynom.Task1.Library
 
         public double[] Coefficients { get; set; }
 
-        public int Degree { get; private set; }
+        public int Degree { get { return Coefficients.Length - 1; } }
 
         #endregion
         
@@ -20,8 +20,11 @@ namespace Polynom.Task1.Library
 
         public SinglePolinomial(double[] coefficientsArray)
         {
-            Coefficients = coefficientsArray;
-            Degree = coefficientsArray.Length - 1;
+            if (coefficientsArray!=null)
+            {
+                Coefficients = coefficientsArray;
+            }
+            
         }
 
         public SinglePolinomial() : this(new double[1] { 0 }){}
@@ -66,7 +69,7 @@ namespace Polynom.Task1.Library
 
         public SinglePolinomial Add(SinglePolinomial added)
         {
-            this.InitializeInstanceBy(Add(this, added));
+            this.Coefficients = added.Coefficients;
             return this;
         }
 
@@ -121,11 +124,6 @@ namespace Polynom.Task1.Library
 
         #region Private methods
 
-        private void InitializeInstanceBy(SinglePolinomial target)
-        {
-            this.Coefficients = target.Coefficients;
-            this.Degree = target.Degree;
-        }
         
         #endregion
 

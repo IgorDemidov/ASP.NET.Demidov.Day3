@@ -10,9 +10,13 @@ namespace Polynom.Task1.Library
     {
         #region Properties
 
-        public double[] Coefficients { get; set; }
+        public double[] Coefficients { get; private set; }
 
-        public int Degree { get { return Coefficients.Length - 1; } }
+        public int Degree 
+        { get { return Coefficients.Length - 1; } }
+
+        public double this[int degree]
+        {get { return Coefficients[degree]; }}
 
         #endregion
         
@@ -35,18 +39,17 @@ namespace Polynom.Task1.Library
 
         public static SinglePolinomial Add(SinglePolinomial first, SinglePolinomial second)
         {
-            if (first.Degree < second.Degree)
+            if (first.Coefficients.Length < second.Coefficients.Length)
             {
                return Add(second,first);
             }
 
-            for (int i = 0; i < second.Degree; i++)
+            for (int i = 0; i < second.Coefficients.Length; i++)
             {
                 first.Coefficients[i] += second.Coefficients[i];
             }
             return first;     
         }
-
 
         #endregion
 
@@ -69,7 +72,7 @@ namespace Polynom.Task1.Library
 
         public SinglePolinomial Add(SinglePolinomial added)
         {
-            this.Coefficients = added.Coefficients;
+            this.Coefficients = Add(this, added).Coefficients;
             return this;
         }
 
@@ -83,49 +86,74 @@ namespace Polynom.Task1.Library
 
         #region Virtual members overriding & interfaces implemention
 
-        public object Clone()
+        public override string ToString()
         {
-            return new SinglePolinomial(Coefficients);
-        }
-
-        bool IEquatable<SinglePolinomial>.Equals(SinglePolinomial other)
-        {
-            if (this.Coefficients.Length != other.Coefficients.Length)
-            {
-                return false;
-            }
-                        
+            string stringRepresentation="";
             for (int i = 0; i < Coefficients.Length; i++)
             {
-                if (this.Coefficients[i] != other.Coefficients[i])
-                    return false;   
+                stringRepresentation += Coefficients[i] + "   ";
             }
-            return true;            
+            return stringRepresentation;
         }
 
+        public object Clone()
+        {
+            return new SinglePolinomial((double[])Coefficients.Clone());
+        }
 
+        public override bool Equals(object obj)
+        {
+            SinglePolinomial objAsSP = obj as SinglePolinomial;
+            return this.Equals(objAsSP);
+        }
 
+        public bool Equals(SinglePolinomial other)
+        {
+            if (other == null)
+            {
+                return false; 
+            }
+
+            return this.ToString() == this.ToString();  
+        }
+        
         public override int GetHashCode()
         {
-            int hashCode = Degree.GetHashCode();
-
-            foreach (double c in Coefficients)
-            {
-                hashCode = hashCode ^ c.GetHashCode();
-            }
-            return hashCode;
+            return this.ToString().GetHashCode();
         }
 
         #endregion
 
         #region Operator Overloading
 
+        public static bool operator ==(SinglePolinomial left, SinglePolinomial right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(SinglePolinomial left, SinglePolinomial right)
+        {
+            return !(left == right);
+        }
+
+        public static SinglePolinomial operator +(SinglePolinomial left, SinglePolinomial right)
+        {
+            return left.Add(right);
+        }
+
+        public static SinglePolinomial operator -(SinglePolinomial left, SinglePolinomial right)
+        {
+            return left.Substract(right);
+        }
+        
         #endregion
 
         #region Private methods
 
         
         #endregion
+
+
 
 
 

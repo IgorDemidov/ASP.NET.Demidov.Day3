@@ -148,10 +148,6 @@ namespace Polynom.Task1.Library
         
         #endregion
 
-        #region Private methods
-
-        
-        #endregion
 
 
 

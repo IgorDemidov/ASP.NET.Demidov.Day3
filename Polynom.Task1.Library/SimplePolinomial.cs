@@ -10,8 +10,6 @@ namespace Polynom.Task1.Library
     {
         #region Private fields
 
-      //  private readonly int NumberOfFractionalDigits = 4; 
-
         private readonly double[] coefficients;
 
         #endregion
@@ -44,12 +42,37 @@ namespace Polynom.Task1.Library
 
         #region Static methods
 
+        public static SimplePolinomial MultiplyByNumber(SimplePolinomial polinomial, double number)
+        {
+            double[] resultCoefs = polinomial.Coefficients;
+            for (int i = 0; i < resultCoefs.Length; i++)
+            {
+                resultCoefs[i] *= number;
+            }
+            return (new SimplePolinomial(resultCoefs));
+        }
+
+        public static SimplePolinomial DivideByNumber(SimplePolinomial polinomial, double number)
+        {
+            if (number==0)
+            {
+                throw new DivideByZeroException("number");
+            }
+
+            double[] resultCoefs = polinomial.Coefficients;
+            for (int i = 0; i < resultCoefs.Length; i++)
+            {
+                resultCoefs[i] /= number;
+            }
+            return (new SimplePolinomial(resultCoefs));
+        }
+
         public static SimplePolinomial Add(SimplePolinomial first, SimplePolinomial second)
         {
             double[] resultCoefs;
             double[] summandCoefs;
-            
-            if (first.coefficients.Length>=second.coefficients.Length)
+
+            if (first.coefficients.Length >= second.coefficients.Length)
             {
                 resultCoefs = first.Coefficients;
                 summandCoefs = second.Coefficients;
@@ -65,44 +88,12 @@ namespace Polynom.Task1.Library
                 resultCoefs[i] += summandCoefs[i];
             }
 
-            return (new SimplePolinomial(resultCoefs));     
-        }
-
-        public static SimplePolinomial MultiplyByNumber(SimplePolinomial polinomial, double number)
-        {
-            double[] resultCoefs = polinomial.Coefficients;
-            for (int i = 0; i < resultCoefs.Length; i++)
-            {
-                resultCoefs[i] *= number;
-            }
             return (new SimplePolinomial(resultCoefs));
         }
 
-        #endregion
-
-        #region Public methods
-
-        public SimplePolinomial DivideByNumber(double number)
+        public static SimplePolinomial Substract(SimplePolinomial minuend, SimplePolinomial subtrahend)
         {
-            if (number == 0)
-                throw new DivideByZeroException();
-
-            return MultiplyByNumber(this, 1/number);
-        }
-
-        public SimplePolinomial Add(SimplePolinomial added)
-        {
-            return Add(this, added);
-        }
-
-        public SimplePolinomial MultiplyByNumber(double number)
-        {
-            return MultiplyByNumber(this, number);
-        }
-
-        public SimplePolinomial Substract(SimplePolinomial substracted)
-        {
-            return Add(this, MultiplyByNumber(substracted, -1));
+            return Add(minuend, MultiplyByNumber(subtrahend,-1));
         }
 
         #endregion
@@ -124,12 +115,6 @@ namespace Polynom.Task1.Library
             return new SimplePolinomial((double[])coefficients.Clone());
         }
 
-        public override bool Equals(object obj)
-        {
-            SimplePolinomial objAsSimplePolinomial = obj as SimplePolinomial;
-            return this.Equals(objAsSimplePolinomial);
-        }
-
         public bool Equals(SimplePolinomial other)
         {
             if (other == null)
@@ -144,6 +129,12 @@ namespace Polynom.Task1.Library
                     return false;
             }
             return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            SimplePolinomial objAsSimplePolinomial = obj as SimplePolinomial;
+            return this.Equals(objAsSimplePolinomial);
         }
         
         public override int GetHashCode()
@@ -160,26 +151,31 @@ namespace Polynom.Task1.Library
 
         #region Operator Overloading
 
-        public static bool operator ==(SimplePolinomial left, SimplePolinomial right)
+        public static bool operator ==(SimplePolinomial lhs, SimplePolinomial rhs)
         {
-            return left.Equals(right);
+            return lhs.Equals(rhs);
         }
 
-        public static bool operator !=(SimplePolinomial left, SimplePolinomial right)
+        public static bool operator !=(SimplePolinomial lhs, SimplePolinomial rhs)
         {
-            return !(left == right);
+            return !lhs.Equals(rhs);
         }
 
-        public static SimplePolinomial operator +(SimplePolinomial left, SimplePolinomial right)
+        public static SimplePolinomial operator +(SimplePolinomial lhs, SimplePolinomial rhs)
         {
-            return left.Add(right);
+            return Add(lhs, rhs);
         }
 
-        public static SimplePolinomial operator -(SimplePolinomial left, SimplePolinomial right)
+        public static SimplePolinomial operator -(SimplePolinomial lhs, SimplePolinomial rhs)
         {
-            return left.Substract(right);
+            return Substract(lhs, rhs);
         }
-        
+
+        public static SimplePolinomial operator /(SimplePolinomial lhs, double rhs)
+        {
+            return DivideByNumber(lhs, rhs);
+        }
+
         #endregion
 
 

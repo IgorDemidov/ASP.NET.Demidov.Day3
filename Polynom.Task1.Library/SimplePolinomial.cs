@@ -126,25 +126,34 @@ namespace Polynom.Task1.Library
 
         public override bool Equals(object obj)
         {
-            SimplePolinomial objAsSP = obj as SimplePolinomial;
-            if (objAsSP == null)
-                return false;    
-            return this.Equals(objAsSP);
+            SimplePolinomial objAsSimplePolinomial = obj as SimplePolinomial;
+            return this.Equals(objAsSimplePolinomial);
         }
 
         public bool Equals(SimplePolinomial other)
         {
             if (other == null)
-            {
                 return false; 
-            }
 
-            return this.ToString() == this.ToString();  
+            if (this.coefficients.Length!=other.coefficients.Length)
+                return false;
+
+            for (int i = 0; i < this.coefficients.Length; i++)
+            {
+                if (this.coefficients[i] != other.coefficients[i])
+                    return false;
+            }
+            return true;
         }
         
         public override int GetHashCode()
         {
-            return this.ToString().GetHashCode();
+            int hash = coefficients.Length;
+            for (int i = 0; i < coefficients.Length; i++)
+            {
+                hash = ((hash << 5)+hash) + coefficients[i].GetHashCode();
+            }
+            return hash;
         }
 
         #endregion
